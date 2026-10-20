@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arácsi út 104. | Amatrine HOME projektek</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* Amatrine HOME (amatrine.eu): fehér alap, mandula felületek, arany kiemelés, taupe gomb, vékony betűk, ritkított nagybetűs címkék */
+:root{
+  --white:#FFFFFF;
+  --almond:#F6F1EB;          /* B lakás oldalszíne (amatrine.eu /fured) */
+  --almond-dark:#EADFD1;     /* A lakás: picit sötétebb mandula */
+  --stone:#E7E2E1;           /* meleg szürke felület */
+  --taupe-light:#CFC5C3;
+  --taupe:#6A6060;           /* gombszín */
+  --ink:#2F2E2E;
+  --ink-soft:#44474D;
+  --muted:#7C7472;
+  --gold:#D3AB58;
+  --gold-soft:#F3E7CC;
+  --page:var(--almond);
+  --f-display:"Cormorant Garamond","Bodoni 72","Didot",Georgia,serif;
+  --f-body:"Jost","Avenir Next","Avenir","Helvetica Neue",Arial,sans-serif;
+}
+body[data-proj="a"]{--page:var(--almond-dark)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--page);color:var(--ink);font-family:var(--f-body);font-weight:300;font-size:16px;line-height:1.6;transition:background .35s ease;-webkit-font-smoothing:antialiased}
+@media (prefers-reduced-motion:reduce){body{transition:none}html{scroll-behavior:auto}}
+.wrap{max-width:960px;margin:0 auto;padding:32px max(16px,env(safe-area-inset-right,0px)) 48px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:36px}
+.label{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);font-weight:400}
+/* header + menu */
+header{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+.brand{font-size:13px;letter-spacing:.45em;text-transform:uppercase;color:var(--ink-soft)}
+.brand b{font-weight:400;color:var(--gold)}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.1;margin:0;letter-spacing:.02em;text-wrap:balance}
+nav.menu{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;background:var(--white);padding:6px;border-radius:999px;box-shadow:0 1px 10px -6px rgba(0,0,0,.5)}
+nav.menu button{font:inherit;font-weight:400;font-size:13px;letter-spacing:.18em;text-transform:uppercase;border:0;background:transparent;color:var(--ink-soft);padding:10px 20px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:10px}
+nav.menu button .st{font-size:10px;letter-spacing:.2em;color:var(--muted)}
+nav.menu button[aria-selected="true"]{background:var(--taupe);color:var(--white)}
+nav.menu button[aria-selected="true"] .st{color:var(--gold-soft)}
+nav.menu button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.sub{max-width:62ch;margin:0;color:var(--ink-soft)}
+.badge{display:inline-block;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--white);background:var(--gold);padding:4px 14px;border-radius:999px}
+/* progress */
+.progress{width:100%;max-width:560px;display:flex;flex-direction:column;gap:8px}
+.bar{height:6px;border-radius:3px;background:var(--stone);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bd{background:var(--taupe)} .bp{background:var(--gold)}
+.prow{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;flex-wrap:wrap}
+.legend{display:flex;gap:14px;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+/* pipeline map */
+.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.stage{background:var(--white);border-radius:6px;padding:18px 10px 14px;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;position:relative;border:1px solid transparent;transition:border-color .2s}
+.stage:hover{border-color:var(--taupe-light)}
+.stage:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.stage.now{border-color:var(--gold)}
+.stage.now::after{content:"Most itt tart";position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--white);font-size:9px;letter-spacing:.22em;text-transform:uppercase;padding:2px 10px;border-radius:999px;white-space:nowrap}
+.ring{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--taupe) 0 var(--d),var(--gold) var(--d) var(--p),var(--stone) var(--p) 100%)}
+.ring b{width:48px;height:48px;border-radius:50%;background:var(--white);display:grid;place-items:center;font-family:var(--f-display);font-size:22px;font-weight:500;color:var(--ink)}
+.stage.complete .ring b{background:var(--taupe);color:var(--white);font-family:var(--f-body);font-size:18px}
+.stage .nm{font-size:13px;font-weight:400;line-height:1.3;text-wrap:balance}
+.stage .ct{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+/* section headings */
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--taupe-light);padding-bottom:10px}
+h2{font-family:var(--f-display);font-weight:400;font-size:30px;line-height:1.15;margin:0}
+/* gantt */
+.gscroll{overflow-x:auto;background:var(--white);border-radius:6px}
+.gtab{min-width:720px;display:grid;grid-template-columns:196px 1fr;font-size:13px}
+.gtab .lab{padding:0 12px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--stone);height:42px;min-width:0}
+.gtab .lab em{font-style:normal;font-family:var(--f-display);font-size:18px;color:var(--gold);font-weight:500}
+.gtab .lab a{color:var(--ink);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gtab .track{position:relative;border-top:1px solid var(--stone);height:42px;background-image:var(--grid)}
+.gtab .mh{position:relative;height:34px;background-image:var(--grid)}
+.gtab .mh span{position:absolute;top:10px;padding-left:8px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.gbar{position:absolute;top:12px;height:18px;border-radius:9px;background:var(--stone);overflow:hidden}
+.gbar i{position:absolute;top:0;bottom:0;display:block}
+.gms{position:absolute;top:14px;width:12px;height:12px;margin-left:-6px;transform:rotate(45deg);background:var(--gold);border:2px solid var(--white);z-index:2}
+.today{position:absolute;top:0;bottom:0;width:1px;background:var(--ink);z-index:3;pointer-events:none}
+.today b{position:absolute;top:3px;left:5px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--ink);white-space:nowrap}
+.gnote{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px}
+.gnote span{display:inline-flex;align-items:center;gap:6px}
+.gnote .dm{width:9px;height:9px;transform:rotate(45deg);background:var(--gold);display:inline-block}
+/* milestones (A lakás) */
+.miles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.miles li{background:var(--white);border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.miles .d{font-family:var(--f-display);font-size:22px;font-weight:500}
+.miles .t{font-size:14px;color:var(--ink-soft)}
+.miles li.next .d{color:var(--muted)}
+/* phase lists */
+.phases{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.phases{grid-template-columns:1fr}}
+.phase{background:var(--white);border-radius:6px;padding:22px 22px 10px;display:flex;flex-direction:column;gap:6px;scroll-margin-top:16px;min-width:0}
+.ph-h{display:flex;align-items:baseline;gap:12px}
+.ph-h .num{font-family:var(--f-display);font-size:30px;line-height:1;color:var(--gold);font-weight:500}
+.ph-h h3{font-family:var(--f-display);font-weight:500;font-size:22px;margin:0;flex:1;min-width:0;line-height:1.2}
+.ph-h small{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ph-d{margin:0 0 6px;font-size:14px;color:var(--muted)}
+ol{list-style:none;margin:0;padding:0}
+ol li{display:grid;grid-template-columns:14px 1fr auto;gap:2px 12px;padding:10px 0;border-top:1px solid var(--stone);align-items:start}
+ol li .dot{width:10px;height:10px;border-radius:50%;margin-top:7px;border:1.5px solid var(--taupe-light);background:var(--white)}
+ol li.done .dot{background:var(--taupe);border-color:var(--taupe)}
+ol li.prog .dot{background:var(--gold);border-color:var(--gold)}
+ol li .tx{min-width:0}
+ol li .tx b{font-weight:400;display:block}
+ol li .tx span{display:block;font-size:13px;color:var(--muted);line-height:1.5}
+ol li.done .tx b{color:var(--ink-soft)}
+.chip{font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:3px 10px;border-radius:999px;white-space:nowrap;margin-top:3px}
+.chip.done{background:var(--stone);color:var(--taupe)}
+.chip.prog{background:var(--gold-soft);color:#8A6A24}
+.chip.todo{border:1px solid var(--taupe-light);color:var(--muted)}
+footer{text-align:center;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+footer a{color:var(--ink-soft);text-decoration:none;border-bottom:1px solid var(--gold)}
+@media (max-width:480px){
+  .map{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .stage{padding:16px 4px 10px}.ring{width:48px;height:48px}.ring b{width:39px;height:39px;font-size:18px}
+  .stage .nm{font-size:11px}
+  nav.menu{flex-wrap:nowrap;border-radius:28px}
+  nav.menu button{flex-direction:column;gap:0;padding:8px 18px;letter-spacing:.14em;border-radius:22px;line-height:1.3}
+  nav.menu button .st{font-size:9px}
+  .phase{padding:18px 16px 8px}
+}
+</style>
+</head>
+<body data-proj="b">
+<div class="wrap" id="app"></div>
+
+<script>
+/* =====================================================================
+   ADATOK — itt szerkeszd. Állapot: "done" = Kész, "prog" = Folyamatban,
+   "todo" = Teendő. Dátum formátum: "ÉÉÉÉ-HH-NN".
+   Egy projekt Gantt-ütemterve akkor jelenik meg, ha van "sched" tömbje
+   (szakaszonként [kezdés, vége]); ha nincs, a "miles" mérföldkövek látszanak.
+   ===================================================================== */
+const UPDATED = "2026-10-20";
+const PROJECTS = {
+  b: {
+    tab: "B lakás", status: "Folyamatban",
+    title: "Balatonfüred, Arácsi út 104. — B lakás",
+    intro: "Home staging és értékesítés. A nappali, a konyha, a master hálószoba és a fürdők berendezése már kész; most a többi helyiség felkészítése zajlik.",
+    sched: [["2026-10-01","2026-10-21"],["2026-10-12","2026-10-24"],["2026-10-19","2026-11-02"],["2026-10-14","2026-10-31"],["2026-10-14","2026-11-14"],["2026-11-10","2026-11-25"],["2026-11-24","2026-12-12"],["2026-12-01","2027-02-28"],["2027-03-01","2027-03-31"]],
+    ms: [{t:"Nagybútor-rendelés indul",d:"2026-10-14",p:4},{t:"Tapéták, tükrök, heverő",d:"2026-10-16",p:4},{t:"Ágy, alsó szoba",d:"2026-10-19",p:4},{t:"Függönyök átvétele",d:"2026-10-28",p:3}],
+    phases: [
+      {name:"Felmérés és stratégia",d:"Dokumentumok, piac, ár, keret és ütemterv.",items:[
+        ["Berendezési lista és költségvetés","done",""],
+        ["Meglévő berendezés felmérése","done","Nappali, konyha, master hálószoba és fürdők berendezése kész; a teraszok bútorai az A lakásból érkeznek"],
+        ["Dokumentumok összegyűjtése","todo","Tulajdoni lap, alaprajz, energetikai tanúsítvány, használatbavételi engedély, alapító okirat"],
+        ["Helyszíni felmérés és „előtte” fotók","todo",""],
+        ["Célcsoport és vevői profil","todo",""],
+        ["Piaci elemzés, versenytárs ingatlanok","todo","Az A lakás értékesítési tapasztalataival"],
+        ["Irányár meghatározása","todo",""],
+        ["Költségkeret és ütemterv","todo",""]]},
+      {name:"Koncepció és tervezés",d:"Stílus, elrendezés és beszerzési terv.",items:[
+        ["Stíluskoncepció és színpaletta","todo",""],
+        ["Moodboard","todo",""],
+        ["Bútorelrendezés alaprajzon","done",""],
+        ["Beszerzési lista helyiségenként","todo","Földszinti előtér, alsó hálószoba, emeleti előtér, emeleti kis hálószoba"],
+        ["Bérlés vagy vásárlás tételenként","todo",""],
+        ["Költségvetés jóváhagyása","todo",""]]},
+      {name:"Előkészítő munkák",d:"Ami a bútorok előtt elkészül.",items:[
+        ["Alapos takarítás","todo",""],
+        ["Apró javítások, beállítások","todo",""],
+        ["Tapéták rendelése","done","3 tekercs márványos az alsó hálóba, 1 nagy leveles a master hálóba, 1 az előszobába és a garázsszinti folyosóra"],
+        ["Tapétázás","todo","Alsó háló, master háló, előszoba, garázsszinti folyosó"],
+        ["Festés","todo",""],
+        ["Világítás, lámpák felszerelése","todo",""],
+        ["Karnisok","done","Felszerelve"]]},
+      {name:"Textil",d:"Függönyök és lakástextil.",items:[
+        ["Függönyök megrendelése","done","Helyi varrodában, méretre"],
+        ["Függönyvarrás","prog","4 sötétítő és áttetsző függönyök; átvétel október végén"],
+        ["Függönyök felrakása","todo",""],
+        ["Ágynemű, párnák, plédek, szőnyegek","todo",""]]},
+      {name:"Beszerzés",d:"A hiányzó helyiségek bútorai és dekorja.",items:[
+        ["Nagybútorok rendelése","prog","Kihúzható heverő és kárpitozott ágy megrendelve"],
+        ["Egyedi tükrök","prog","4 méretre gyártott tükör: nappali bronz, előszoba, hálószoba félkör, beépített szekrény oldala; árajánlatkérés folyamatban"],
+        ["Földszinti előtér","todo","Konzolasztal, tükör, puff, fogasok, dekor"],
+        ["Alsó hálószoba","prog","Kárpitozott skandináv ágy 140×200 megrendelve; matrac, ágynemű, éjjeliszekrények, lámpák, dekor hátravan"],
+        ["Emeleti előtér","todo","Konzolasztal, tükör, padlóváza, LED-csík"],
+        ["Emeleti kis hálószoba","prog","Kihúzható heverő 90×200 megrendelve; matrac, textil, lámpák, dekor hátravan"],
+        ["Dekor, növények, kaspók","todo",""],
+        ["Teraszbútorok átköltöztetése az A lakásból","todo",""]]},
+      {name:"Berendezés és styling",d:"Szállítástól a bemutató-kész állapotig.",items:[
+        ["Szállítások fogadása","todo",""],["Összeszerelés","todo",""],["Bútorok elhelyezése","todo",""],
+        ["Styling helyiségenként","todo",""],["Teraszok stylingja","todo",""],["Végső takarítás","todo",""],
+        ["Bemutató-kész ellenőrzés","todo","Fények, illat, szellőztetés, részletek"],["„Utána” fotók","todo",""]]},
+      {name:"Marketing",d:"Anyagok és megjelenések.",items:[
+        ["Professzionális fotózás","todo",""],["Videó","todo",""],["3D virtuális bejárás","todo",""],["Drónvideó","todo",""],
+        ["Alaprajz grafika","todo",""],["Hirdetésszöveg magyarul és angolul","todo",""],["Ingatlan adatlap, brosúra","todo",""],
+        ["Megjelenés az amatrine.eu oldalon","todo",""],["Ingatlanportálok","todo",""],["RE/MAX Collection hálózat","todo",""],
+        ["Közösségi média","prog",""],["Fizetett Facebook-hirdetések","todo",""],["Korábbi érdeklődők értesítése","todo",""]]},
+      {name:"Értékesítés",d:"Érdeklődőtől az aláírt szerződésig.",items:[
+        ["Érdeklődők kezelése","todo",""],["Bemutatók, nyílt nap","todo",""],["Visszajelzések, ár felülvizsgálata","todo",""],
+        ["Ajánlatok, tárgyalás","todo",""],["Elővásárlási jog tisztázása","todo",""],["Adó- és illetéktájékoztatás","todo",""],
+        ["Adásvételi szerződés","todo",""],["Foglaló, vételár ütemezése","todo",""]]},
+      {name:"Átadás és lezárás",d:"Birtokbaadás és a projekt lezárása.",items:[
+        ["Birtokbaadás","todo",""],["Közműórák átírása","todo",""],["Átadás-átvételi jegyzőkönyv","todo",""],
+        ["Bútorok sorsa","todo","Vevőnek, következő projektbe vagy elszállítás"],["Elszámolás, számlák","todo",""],
+        ["Referenciafotók, portfólió","todo",""],["Vevői visszajelzés","todo",""]]}
+    ]
+  },
+  a: {
+    tab: "A lakás", status: "Eladva",
+    title: "Balatonfüred, Arácsi út 104. — A lakás",
+    intro: "Home staging, marketing és értékesítés. A lakás 2026. október 6-án gazdára talált; a birtokbaadás és a lezáró lépések vannak hátra.",
+    sold: "Eladva · 2026. október 6.",
+    miles: [
+      {t:"Berendezési terv és költségvetés",d:"2025-03"},
+      {t:"Egyedi tükrök megrendelése",d:"2025-09"},
+      {t:"Adásvétel",d:"2026-10-06"},
+      {t:"Birtokbaadás",d:"",next:true}
+    ],
+    phases: [
+      {name:"Felmérés és stratégia",d:"Dokumentumok, piac, ár, keret és ütemterv.",items:[
+        ["Berendezési lista és költségvetés","done",""],["Dokumentumok összegyűjtése","done",""],["Helyszíni felmérés és „előtte” fotók","done",""],
+        ["Célcsoport és vevői profil","done",""],["Piaci elemzés, versenytárs ingatlanok","done",""],["Irányár meghatározása","done",""],["Költségkeret és ütemterv","done",""]]},
+      {name:"Koncepció és tervezés",d:"Stílus, elrendezés és beszerzési terv.",items:[
+        ["Stíluskoncepció és színpaletta","done",""],["Moodboard","done",""],["Bútorelrendezés alaprajzon","done",""],
+        ["Beszerzési lista helyiségenként","done",""],["Bérlés vagy vásárlás tételenként","done",""],["Költségvetés jóváhagyása","done",""]]},
+      {name:"Előkészítő munkák",d:"Ami a bútorok előtt elkészül.",items:[
+        ["Takarítás, javítások","done",""],["Tapétázás, festés","done",""],["Világítás, lámpák felszerelése","done",""],
+        ["Egyedi gyártású elemek","done","Gardróbok, lépcső alatti ajtó, beépített szekrények"],["Karnisok","done",""]]},
+      {name:"Textil",d:"Függönyök és lakástextil.",items:[
+        ["Függönyök","done",""],["Ágynemű, párnák, plédek, szőnyegek","done",""]]},
+      {name:"Beszerzés",d:"Bútorok, tükrök, dekor.",items:[
+        ["Nappali és étkező","done",""],["Konyha","done",""],["Hálószobák","done",""],["Előterek","done",""],
+        ["Fürdők","done",""],["Teraszok","done",""],["Egyedi tükrök","done","Bronz és ezüst, méretre gyártva"]]},
+      {name:"Berendezés és styling",d:"Szállítástól a bemutató-kész állapotig.",items:[
+        ["Szállítások, összeszerelés","done",""],["Bútorok elhelyezése","done",""],["Styling helyiségenként","done",""],
+        ["Teraszok stylingja","done",""],["Bemutató-kész ellenőrzés","done",""]]},
+      {name:"Marketing",d:"Anyagok és megjelenések.",items:[
+        ["Professzionális fotózás","done",""],["Videó","done",""],["3D virtuális bejárás","done",""],["Drónvideó","done",""],
+        ["Hirdetésszöveg magyarul és angolul","done",""],["Megjelenés az amatrine.eu oldalon","done",""],["Ingatlanportálok","done",""],
+        ["Fizetett Facebook-hirdetések","done",""],["Közösségi média","done",""]]},
+      {name:"Értékesítés",d:"Érdeklődőtől az aláírt szerződésig.",items:[
+        ["Érdeklődők kezelése, bemutatók","done",""],["Ajánlatok, tárgyalás","done",""],["Elővásárlási jog tisztázása","done",""],
+        ["Adó- és illetéktájékoztatás","done",""],["Adásvételi szerződés","done","2026. október 6."]]},
+      {name:"Átadás és lezárás",d:"Birtokbaadás és a projekt lezárása.",items:[
+        ["Birtokbaadás","todo",""],["Közműórák átírása","todo","Villany, víz, gáz mérőállás rögzítése és átírása"],
+        ["Átadás-átvételi jegyzőkönyvek","todo",""],["Teraszbútorok átköltöztetése a B lakásba","todo",""],
+        ["Elszámolás, számlák","todo",""],["Referenciafotók, portfólió","todo",""],["Vevői visszajelzés","todo",""]]}
+    ]
+  }
+};
+/* ===================================================================== */
+
+(function(){
+  var LABEL={done:"Kész",prog:"Folyamatban",todo:"Teendő"};
+  var HM=["jan","febr","márc","ápr","máj","jún","júl","aug","szept","okt","nov","dec"];
+  var app=document.getElementById("app");
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function pd(s){var a=s.split("-");return new Date(+a[0],+a[1]-1,+(a[2]||1))}
+  function fmtShort(s){var d=pd(s);return HM[d.getMonth()]+". "+d.getDate()+"."}
+  function fmtMile(s){if(!s)return "Hamarosan";var a=s.split("-");var m=HM[+a[1]-1];return a[2]?a[0]+". "+m+". "+(+a[2])+".":a[0]+". "+m+"."}
+  function cnt(items){var d=0,p=0;items.forEach(function(i){if(i[1]==="done")d++;else if(i[1]==="prog")p++});return{d:d,p:p,n:items.length}}
+
+  function gantt(P){
+    var S=P.sched,lo=pd(S[0][0]),hi=pd(S[0][1]);
+    S.forEach(function(r){var a=pd(r[0]),b=pd(r[1]);if(a<lo)lo=a;if(b>hi)hi=b});
+    var t0=new Date(lo.getFullYear(),lo.getMonth(),1),t1=new Date(hi.getFullYear(),hi.getMonth()+1,1),span=t1-t0;
+    function x(d){return (d-t0)/span*100}
+    var mh="",stops=[],m=new Date(t0);
+    while(m<t1){var px=x(m);stops.push(px);mh+='<span style="left:'+px+'%">'+HM[m.getMonth()]+(m.getMonth()===0||+m===+t0?" "+m.getFullYear():"")+'</span>';m=new Date(m.getFullYear(),m.getMonth()+1,1)}
+    var grid=stops.map(function(s){return "linear-gradient(to right,transparent calc("+s+"% - .5px),#E7E2E1 calc("+s+"% - .5px),#E7E2E1 calc("+s+"% + .5px),transparent calc("+s+"% + .5px))"}).join(",");
+    var now=new Date();now=new Date(now.getFullYear(),now.getMonth(),now.getDate());var tx=(now>=t0&&now<t1)?x(now):null;
+    var h='<section><div class="sec-h"><h2>Ütemterv</h2><span class="label">Tervezett időzítés</span></div><div class="gscroll" style="margin-top:14px"><div class="gtab" style="--grid:'+grid+'"><div class="lab" style="border-top:0;height:34px"></div><div class="mh">'+mh+'</div>';
+    P.phases.forEach(function(ph,pi){var r=S[pi];if(!r)return;var c=cnt(ph.items),l=x(pd(r[0])),w=x(new Date(+pd(r[1])+864e5))-l;
+      h+='<div class="lab"><em>'+(pi+1)+'</em><a href="#ph'+(pi+1)+'">'+esc(ph.name)+'</a></div><div class="track"><div class="gbar" style="left:'+l+'%;width:'+w+'%" title="'+esc(ph.name)+': '+fmtShort(r[0])+' – '+fmtShort(r[1])+'"><i class="bd" style="left:0;width:'+(c.d/c.n*100)+'%"></i><i class="bp" style="left:'+(c.d/c.n*100)+'%;width:'+(c.p/c.n*100)+'%"></i></div>';
+      (P.ms||[]).forEach(function(mm){if(mm.p===pi)h+='<div class="gms" style="left:'+(x(pd(mm.d))+864e5/span*50)+'%" title="'+esc(mm.t)+' · '+fmtShort(mm.d)+'"></div>'});
+      if(tx!==null)h+='<div class="today" style="left:'+tx+'%">'+(pi===0?'<b>Ma</b>':'')+'</div>';
+      h+='</div>'});
+    h+='</div></div><div class="gnote"><span><i class="dm"></i>Mérföldkövek: '+(P.ms||[]).map(function(mm){return esc(mm.t)+' ('+fmtShort(mm.d)+')'}).join(" · ")+'</span></div></section>';
+    return h;
+  }
+  function miles(P){
+    var h='<section><div class="sec-h"><h2>Mérföldkövek</h2></div><ul class="miles" style="margin-top:14px">';
+    P.miles.forEach(function(m){h+='<li class="'+(m.next?'next':'')+'"><span class="label">'+(m.next?'Következik':'Teljesítve')+'</span><span class="d">'+fmtMile(m.d)+'</span><span class="t">'+esc(m.t)+'</span></li>'});
+    return h+'</ul></section>';
+  }
+
+  function render(key){
+    var P=PROJECTS[key];document.body.setAttribute("data-proj",key);
+    var all=0,done=0,prog=0,now=-1;
+    P.phases.forEach(function(ph,pi){var c=cnt(ph.items);all+=c.n;done+=c.d;prog+=c.p;if(now<0&&c.d<c.n)now=pi});
+    var h='<header><div class="brand">amatrine <b>home</b></div>';
+    h+='<nav class="menu" role="tablist" aria-label="Projektek">';
+    Object.keys(PROJECTS).forEach(function(k){var Q=PROJECTS[k];h+='<button role="tab" id="tab-'+k+'" data-k="'+k+'" aria-selected="'+(k===key)+'">'+esc(Q.tab)+'<span class="st">'+esc(Q.status)+'</span></button>'});
+    h+='</nav><h1>'+esc(P.title)+'</h1>'+(P.sold?'<span class="badge">'+esc(P.sold)+'</span>':'')+'<p class="sub">'+esc(P.intro)+'</p>';
+    h+='<div class="progress"><div class="bar"><i class="bd" style="width:'+(done/all*100)+'%"></i><i class="bp" style="width:'+(prog/all*100)+'%"></i></div><div class="prow"><div class="legend"><span><i style="background:var(--taupe)"></i>Kész</span><span><i style="background:var(--gold)"></i>Folyamatban</span><span><i style="background:var(--stone)"></i>Teendő</span></div><span>'+done+' / '+all+' lépés kész</span></div></div></header>';
+    h+='<nav class="map" aria-label="Szakaszok">';
+    P.phases.forEach(function(ph,pi){var c=cnt(ph.items),comp=c.d===c.n;
+      h+='<a class="stage'+(pi===now?' now':'')+(comp?' complete':'')+'" href="#ph'+(pi+1)+'"><span class="ring" style="--d:'+(c.d/c.n*100)+'%;--p:'+((c.d+c.p)/c.n*100)+'%"><b>'+(comp?'✓':pi+1)+'</b></span><span class="nm">'+esc(ph.name)+'</span><span class="ct">'+c.d+' / '+c.n+'</span></a>'});
+    h+='</nav>';
+    h+=P.sched?gantt(P):(P.miles?miles(P):'');
+    h+='<section><div class="sec-h"><h2>Munkafolyamat</h2><span class="label">'+P.phases.length+' szakasz</span></div><div class="phases" style="margin-top:14px">';
+    P.phases.forEach(function(ph,pi){var c=cnt(ph.items);
+      h+='<article class="phase" id="ph'+(pi+1)+'"><div class="ph-h"><span class="num">'+(pi+1)+'</span><h3>'+esc(ph.name)+'</h3><small>'+c.d+' / '+c.n+'</small></div><p class="ph-d">'+esc(ph.d)+'</p><ol>';
+      ph.items.forEach(function(it){h+='<li class="'+it[1]+'"><span class="dot"></span><span class="tx"><b>'+esc(it[0])+'</b>'+(it[2]?'<span>'+esc(it[2])+'</span>':'')+'</span><span class="chip '+it[1]+'">'+LABEL[it[1]]+'</span></li>'});
+      h+='</ol></article>'});
+    h+='</div></section><footer>Frissítve: '+esc(UPDATED.replace(/-/g,". "))+'. · <a href="https://www.amatrine.eu" target="_blank" rel="noopener">amatrine.eu</a></footer>';
+    app.innerHTML=h;
+    sendHeight();
+  }
+
+  /* Wix / iframe automatikus magasság */
+  function sendHeight(){try{var hgt=document.documentElement.scrollHeight;window.parent.postMessage({type:"amatrine-resize",height:hgt},"*");window.parent.postMessage({height:hgt},"*")}catch(e){}}
+  if(window.ResizeObserver)new ResizeObserver(sendHeight).observe(document.body);
+  window.addEventListener("load",sendHeight);
+
+  function pick(){var q=(location.search.match(/[?&]p=([ab])/)||[])[1];var hsh=(location.hash.match(/^#(a|b)$/)||[])[1];return hsh||q||"b"}
+  app.addEventListener("click",function(e){
+    var b=e.target.closest("button[data-k]");
+    if(b){render(b.dataset.k);try{history.replaceState(null,"","#"+b.dataset.k)}catch(_){}var nb=document.getElementById("tab-"+b.dataset.k);if(nb)nb.focus();return}
+    var a=e.target.closest('a[href^="#ph"]');
+    if(a){e.preventDefault();var t=document.querySelector(a.getAttribute("href"));if(t)t.scrollIntoView({behavior:"smooth",block:"start"})}
+  });
+  app.addEventListener("keydown",function(e){
+    var b=e.target.closest("button[data-k]");if(!b||(e.key!=="ArrowRight"&&e.key!=="ArrowLeft"))return;
+    var ks=Object.keys(PROJECTS),i=ks.indexOf(b.dataset.k);var n=ks[(i+(e.key==="ArrowRight"?1:ks.length-1))%ks.length];
+    render(n);document.getElementById("tab-"+n).focus();
+  });
+  render(pick());
+})();
+</script>
+</body>
+</html>
