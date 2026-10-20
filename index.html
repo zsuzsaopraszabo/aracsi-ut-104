@@ -119,6 +119,20 @@ ol li.done .tx b{color:var(--ink-soft)}
 .chip.done{background:var(--stone);color:var(--taupe)}
 .chip.prog{background:var(--gold-soft);color:#8A6A24}
 .chip.todo{border:1px solid var(--taupe-light);color:var(--muted)}
+/* elszámolás (A lakás) */
+.settle{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+@media (max-width:760px){.settle{grid-template-columns:1fr}}
+.settle .card{background:var(--white);border-radius:6px;padding:20px 22px;min-width:0}
+.settle h3{font-family:var(--f-display);font-weight:500;font-size:21px;margin:0 0 6px}
+.settle table{width:100%;border-collapse:collapse;font-variant-numeric:lining-nums tabular-nums;font-size:14px}
+.settle td{padding:9px 0;border-top:1px solid var(--stone);vertical-align:top}
+.settle td.n{text-align:right;white-space:nowrap;padding-left:12px}
+.settle td small{display:block;color:var(--muted);font-size:12px;line-height:1.45}
+.settle tr.minus td.n{color:#8A6A24}
+.settle tr.total td{border-top:1.5px solid var(--taupe);font-weight:500}
+.settle-sum{grid-column:1/-1;background:var(--white);border-radius:6px;border-top:3px solid var(--gold);padding:16px 22px;display:flex;align-items:baseline;justify-content:space-between;gap:8px 16px;flex-wrap:wrap}
+.settle-sum .v{font-family:var(--f-display);font-weight:500;font-size:28px;font-variant-numeric:lining-nums tabular-nums;line-height:1.1}
+.settle-sum small{display:block;color:var(--muted);font-size:13px}
 footer{text-align:center;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 footer a{color:var(--ink-soft);text-decoration:none;border-bottom:1px solid var(--gold)}
 @media (max-width:480px){
@@ -219,6 +233,11 @@ const PROJECTS = {
       {t:"Adásvétel",d:"2026-10-06"},
       {t:"Birtokbaadás",d:"",next:true}
     ],
+    settle: {
+      price: 320000000, rate: 0.035, hs: 1989000, hsBasis: "13 000 Ft/m² × 153 m²",
+      invoice: {no:"AMA-2025-17", date:"2025. 10. 22.", total:3984000},
+      note: "nettó = bruttó, alanyi adómentes, ÁFA 0 Ft"
+    },
     phases: [
       {name:"Felmérés és stratégia",d:"Dokumentumok, piac, ár, keret és ütemterv.",items:[
         ["Berendezési lista és költségvetés","done",""],["Dokumentumok összegyűjtése","done",""],["Helyszíni felmérés és „előtte” fotók","done",""],
@@ -287,6 +306,23 @@ const PROJECTS = {
     return h+'</ul></section>';
   }
 
+  function ft(n){return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")+" Ft"}
+  function settle(P){
+    var S=P.settle,fee=S.price*S.rate,due=fee-S.hs,other=S.invoice.total-S.hs;
+    var h='<section><div class="sec-h"><h2>Elszámolás</h2><span class="label">Közvetítői sikerdíj</span></div><div class="settle">';
+    h+='<div class="card"><h3>Sikerdíj</h3><table>'+
+      '<tr><td>Vételár<small>Adásvétel: 2026. 10. 06.</small></td><td class="n">'+ft(S.price)+'</td></tr>'+
+      '<tr><td>Sikerdíj, nettó 3,5 %<small>A szerződés szerint</small></td><td class="n">'+ft(fee)+'</td></tr>'+
+      '<tr class="minus"><td>Már kifizetett Home Staging díj<small>'+esc(S.hsBasis)+'</small></td><td class="n">− '+ft(S.hs)+'</td></tr>'+
+      '<tr class="total"><td>Kiszámlázandó</td><td class="n">'+ft(due)+'</td></tr></table></div>';
+    h+='<div class="card"><h3>Korábbi számla bontása</h3><table>'+
+      '<tr><td>Home Staging díj a megegyezés szerint<small>'+esc(S.hsBasis)+'; levonódik a sikerdíjból</small></td><td class="n">'+ft(S.hs)+'</td></tr>'+
+      '<tr><td>Egyéb: bútor, dekor, alvállalkozók<small>Beszerzések, szállítás, szerelés; nem vonódik le</small></td><td class="n">'+ft(other)+'</td></tr>'+
+      '<tr class="total"><td>'+esc(S.invoice.no)+' · '+esc(S.invoice.date)+'</td><td class="n">'+ft(S.invoice.total)+'</td></tr></table></div>';
+    h+='<div class="settle-sum"><div><span class="label">Kiszámlázandó közvetítői sikerdíj</span><small>'+esc(S.note)+'</small></div><span class="v">'+ft(due)+'</span></div>';
+    return h+'</div></section>';
+  }
+
   function render(key){
     var P=PROJECTS[key];document.body.setAttribute("data-proj",key);
     var all=0,done=0,prog=0,now=-1;
@@ -306,7 +342,7 @@ const PROJECTS = {
       h+='<article class="phase" id="ph'+(pi+1)+'"><div class="ph-h"><span class="num">'+(pi+1)+'</span><h3>'+esc(ph.name)+'</h3><small>'+c.d+' / '+c.n+'</small></div><p class="ph-d">'+esc(ph.d)+'</p><ol>';
       ph.items.forEach(function(it){h+='<li class="'+it[1]+'"><span class="dot"></span><span class="tx"><b>'+esc(it[0])+'</b>'+(it[2]?'<span>'+esc(it[2])+'</span>':'')+'</span><span class="chip '+it[1]+'">'+LABEL[it[1]]+'</span></li>'});
       h+='</ol></article>'});
-    h+='</div></section><footer>Frissítve: '+esc(UPDATED.replace(/-/g,". "))+'. · <a href="https://www.amatrine.eu" target="_blank" rel="noopener">amatrine.eu</a></footer>';
+    h+='</div></section>'+(P.settle?settle(P):'')+'<footer>Frissítve: '+esc(UPDATED.replace(/-/g,". "))+'. · <a href="https://www.amatrine.eu" target="_blank" rel="noopener">amatrine.eu</a></footer>';
     app.innerHTML=h;
     sendHeight();
   }
