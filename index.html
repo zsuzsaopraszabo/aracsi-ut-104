@@ -21,6 +21,7 @@
   --muted:#7C7472;
   --gold:#D3AB58;
   --gold-soft:#F3E7CC;
+  --olive:#6B7A3A;          /* teljesített mérföldkő */
   --page:var(--almond);
   --f-display:"Cormorant Garamond","Bodoni 72","Didot",Georgia,serif;
   --f-body:"Jost","Avenir Next","Avenir","Helvetica Neue",Arial,sans-serif;
@@ -89,8 +90,10 @@ h2{font-family:var(--f-display);font-weight:400;font-size:30px;line-height:1.15;
 /* milestones (A lakás) */
 .miles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
 .miles li{background:var(--white);border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
-.miles .d{font-family:var(--f-display);font-size:22px;font-weight:500}
-.miles .t{font-size:14px;color:var(--ink-soft)}
+.miles .t{font-family:var(--f-display);font-size:21px;font-weight:500;line-height:1.25;color:var(--ink)}
+.miles .d{font-size:15px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.miles .st{margin-top:auto;padding-top:10px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;font-weight:500;color:var(--olive)}
+.miles li.next .st{color:var(--muted)}
 .miles li.next .d{color:var(--muted)}
 /* phase lists */
 .phases{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -278,7 +281,7 @@ const PROJECTS = {
   }
   function miles(P){
     var h='<section><div class="sec-h"><h2>Mérföldkövek</h2></div><ul class="miles" style="margin-top:14px">';
-    P.miles.forEach(function(m){h+='<li class="'+(m.next?'next':'')+'"><span class="label">'+(m.next?'Következik':'Teljesítve')+'</span><span class="d">'+fmtMile(m.d)+'</span><span class="t">'+esc(m.t)+'</span></li>'});
+    P.miles.forEach(function(m){h+='<li class="'+(m.next?'next':'')+'"><span class="t">'+esc(m.t)+'</span><span class="d">'+fmtMile(m.d)+'</span><span class="st">'+(m.next?'Következik':'Teljesítve')+'</span></li>'});
     return h+'</ul></section>';
   }
 
